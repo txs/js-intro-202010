@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is rainbow color</h1>
+</body>
+<script>
+    let h1 = document.querySelector("h1");
+    let rainbow = ['red','orange', 'yellow', 'green', 'blue', 'purple']
+    // console.log(h1);
+    let timer = 0
+    setInterval(function(){
+    h1.style.backgroundColor = rainbow[timer]
+    timer = (timer+1)%rainbow.length
+    },100)
+
+</script>
+</html>
