@@ -1,0 +1,13 @@
+<script>
+    var url = 'http://localhost:5500/18-demo/test.html';
+    fetch(url, {
+      method: 'GET',
+    })
+      .then(response => {
+        return response.text();
+      }).catch(function (error) {
+        console.log(error.error());
+      }).then(result => {
+        console.log(result);
+      });
+  </script>

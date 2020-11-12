@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='box' style="width: 200px; height: 200px; position: absolute;">
+        <!-- X、Y軸 -->
+        <div style="position: absolute; top: 99px; left: 0px; height: 2px; width: 200px;background-color: black;"></div>
+        <div style="position: absolute; top: 0px; left: 99px; height: 200px; width: 2px;background-color: black;"></div>
+    </div>
+    <div id='result' style="position: absolute; top: 215px;"></div>
+    <div id='messages' style="position: absolute; top: 245px;"></div>
+</body>
+<script>
+    let box = document.getElementById('box')
+    let result = document.getElementById('result')
+    let messages = document.getElementById('messages')
+    // 2*2 菱形的四條線
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            let line = document.createElement('div')
+            line.style.position = 'absolute'
+            line.style.top = 50 * (1 - (2 ** 0.5)) - 1 + 100 * j + 'px' //由 j 上下平移斜線 因為長度多二切齊 所以要往上 1 讓中心點不變
+            line.style.left = 49 + 100 * i + 'px' //由 i 左右平移斜線
+            line.style.backgroundColor = 'red'
+            line.style.height = 100 * (2 ** 0.5) + 2 + 'px' // 更號2長度 並加上 2px 讓角落切齊
+            line.style.width = '2px'
+            line.style.transform = 'rotate(' + (45 + 90 * (i + j)) + 'deg)' // 1、3相線轉 90 度 第四相線轉180
+            box.appendChild(line)
+        }
+    }
+    // 圓形作圖
+    let circle = document.createElement('div')
+    circle.style.position = 'absolute'
+    circle.style.height = 200 - 2 + 'px'
+    circle.style.width = 200 - 2 + 'px'
+    circle.style.borderStyle = 'solid'
+    circle.style.borderWidth = '2px'
+    circle.style.borderRadius = '50%'
+    circle.style.borderColor = 'blue'
+    box.appendChild(circle)
+
+    let tries = 1000 //試了幾次
+    let isInside = 0
+    let baseArea = 2 * 2
+    for (let i = 0; i < tries; i++) {
+        // 創造點元素
+        let dot = document.createElement('div')
+        // 創造點座標
+        const targetlen = 100
+        const fullTargetlen = targetlen * 2
+        let x = Math.random() * (fullTargetlen) - 100 // 為 -100~100亂數
+        let y = Math.random() * (fullTargetlen) - 100 // 為 -100~100亂數
+        // 點在絕對座標 
+        dot.style.position = 'absolute'
+        // 點的長寬
+        dot.style.height = '2px'
+        dot.style.width = '2px'
+        dot.style.backgroundColor = 'green' // 點的顏色
+        dot.style.top = x + 100 + 'px' // 轉換為座標
+        dot.style.left = y + 100 + 'px' // 轉換為座標
+        dot.style.borderRadius = '50%' // 將點化為圓的
+        // 提示 菱形公式 |x|+|y| = targetlen
+        // 可轉為 (x ** 2) ** 0.5 + (y ** 2) ** 0.5 = targetlen
+        // 提示 圓形公式 x平方+y平方 = targetlen平方
+        const judgeOperator = (x ** 2) ** 0.5 + (y ** 2) ** 0.5 <= targetlen
+        let insideOrNot = judgeOperator ? 'Inside! &emsp;&nbsp;&nbsp;' : 'Outside!&emsp;' //判斷內還是外來決定印出什麼 &#09; is tab in html
+        setTimeout(() => {
+            judgeOperator ? isInside++ : isInside
+            // console.log(i);
+            let predictedArea = isInside / (i + 1) * baseArea
+            box.appendChild(dot)
+            let timeOrTimes = ' time' + (isInside > 1 ? 's' : '')
+            result.innerHTML = 'Tried ' + (i + 1) + timeOrTimes + ' in for ' + isInside + timeOrTimes + '! Predicted Area is ' + predictedArea
+            messages.innerHTML += insideOrNot + ' x:' + x + ', y:' + y + '<br>'
+        }, 10 * i * tries / 1000)
+    }
+</script>
+
+</html>
